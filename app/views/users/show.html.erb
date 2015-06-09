@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<% link_to 'Edit', edit_user_path(@user) %>
+<% link_to 'Back', users_path %>
+
+<h1><%= @user.username %></h1>
+------
+<p>zone1 min: <%= @user.hr_zone1_bpm_min %></p>
+<p>zone1 max: <%= @user.hr_zone1_bpm_max %></p>
+------
+<p>zone2 min: <%= @user.hr_zone2_bpm_min %></p>
+<p>zone2 max: <%= @user.hr_zone2_bpm_max %></p>
+------
+<p>zone3 min: <%= @user.hr_zone3_bpm_min %></p>
+<p>zone3 max: <%= @user.hr_zone3_bpm_max %></p>
+------
+<p>zone4 min: <%= @user.hr_zone4_bpm_min %></p>
+<p>zone4 max: <%= @user.hr_zone4_bpm_max %></p>
+------
+
+<br />
+<br />
+
+
+<% @user.hrm_sessions.each do |hrm_session| %>
+  id: <%= hrm_session.id %>
+  duration: <%= HHMMSS(hrm_session.duration) %>
+  <%= react_component('HrmSessionButton',
+                       session_id: hrm_session.id,
+                       session_duration: HHMMSS(hrm_session.duration)) %>
+  <br />
+<% end %>
+

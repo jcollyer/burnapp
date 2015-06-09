@@ -1,0 +1,6 @@
+<h3>total duration: <%= @hrm_session.duration %></h3>
+<% @hrm_session.hrm_data_points.each do |hrm_data_point| %>
+  hrm session id: <%= hrm_data_point.hrm_session_id %>
+  bpm <%= hrm_data_point.bpm %>
+  <br />
+<% end %>

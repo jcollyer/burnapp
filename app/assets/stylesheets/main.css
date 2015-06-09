@@ -1,0 +1,56 @@
+body{
+    background: #f4f4f4;
+}
+  /* tell the SVG path to be a thin blue line without any area fill */
+  path {
+    stroke: steelblue;
+    stroke-width: 1;
+    fill: none;
+  }
+
+  .axis {
+    shape-rendering: crispEdges;
+  }
+
+  .x.axis line {
+    stroke: lightgrey;
+  }
+
+  .x.axis .minor {
+    stroke-opacity: .5;
+  }
+
+  .y.axis line, .y.axis path {
+    fill: none;
+    stroke: #000;
+  }
+
+  .x.axis line, .x.axis path {
+    fill: none;
+    stroke: #000;
+  }
+
+#loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width:100%;
+  height:100%;
+  background: rgba(0,0,0,0.5);
+  display: none;
+}
+
+#loader h1 {
+  text-align: center;
+  position: absolute;
+  top: 40%;
+  left:0;
+  right:0;
+  margin:auto;
+  color:white;
+}
+
+#loader.is-loading {
+  display:block;
+}
+
