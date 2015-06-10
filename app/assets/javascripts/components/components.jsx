@@ -40,16 +40,50 @@ var HrmSessionButton = React.createClass({
     })
 
     // Add an SVG element with the desired dimensions and margin.
-    var graph = d3.select("#graph").append("svg:svg")
+    var lineGraph = d3.select("#lineGraph").append("svg:svg")
                   .attr("width", w + m[1] + m[3])
                   .attr("height", h + m[0] + m[2])
                   .append("svg:g")
                   .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
+
+
+
+
+    // horizontal data /////////////////////////
+    var data = [4, 8, 15, 16, 23, 42];
+
+    var xAxis = d3.scale.linear()
+         .domain([0, d3.max(data)])
+         .range([0, w]);
+
+    var yAxis = d3.scale.ordinal()
+         .domain(data)
+         .rangeBands([0, h]);
+
+    lineGraph.selectAll("rect")
+         .data(data)
+       .enter().append("rect")
+         .attr("y", yAxis)
+         .attr("width", xAxis)
+         .attr("height", yAxis.rangeBand());
+
+    lineGraph.selectAll("text")
+         .data(data)
+       .enter().append("text")
+         .attr("x", xAxis)
+         .attr("y", function(d) { return yAxis(d) + yAxis.rangeBand() / 2; })
+         .attr("dx", -3) // padding-right
+         .attr("dy", ".35em") // vertical-align: middle
+         .attr("text-anchor", "end") // text-align: right
+         .text(String);
+
+     /////////////////////////////////////////
+
     // create left yAxis
     var yAxisLeft = d3.svg.axis().scale(y).ticks(4).orient("left");
     // Add the y-axis to the left
-    graph.append("svg:g")
+    lineGraph.append("svg:g")
          .attr("class", "y axis")
          .attr("transform", "translate(-25,0)")
          .call(yAxisLeft);
@@ -58,7 +92,7 @@ var HrmSessionButton = React.createClass({
     //    .tickFormat(format);
     //    .ticks(d3.time.days, 1);
 
-    graph.append("svg:g")
+    lineGraph.append("svg:g")
          .attr("class", "x axis")
          .attr("transform", "translate(0," + (h) + ")")
          .call(xAxisBottom)
@@ -71,7 +105,7 @@ var HrmSessionButton = React.createClass({
 
     // Add the line by appending an svg:path element with the bpmData line we created above
     // do this AFTER the axes above so that the line is above the tick-lines
-    graph.append("svg:path").attr("d", line(bpmData));
+    lineGraph.append("svg:path").attr("d", line(bpmData));
 
   },
   getInitialState: function() {
@@ -108,7 +142,8 @@ var HrmSessionButton = React.createClass({
     return (
       <div>
       <div id="loader" className={this.state.loading? "is-loading" : ""}><h1>Loading...</h1></div>
-      <div id="graph" className="aGraph"></div>
+      <div id="lineGraph" className="aGraph"></div>
+      <div id="barGraph" className="aGraph"></div>
         <button onClick={this.handleClick}>DataPonts</button>
       </div>
     );
