@@ -1,26 +1,92 @@
-var HrmSessionButton = React.createClass({
+var getDementions = function(){
+  // define dimensions of graph
+  m = [80, 80, 80, 80]; // margins
+  w = 1000 - m[1] - m[3]; // width
+  h = 400 - m[0] - m[2]; // height
+  p = 50; //padding
+}
+var HrZoneChart = React.createClass({
   drawDataVisualization: function() {
       /* implementation heavily influenced by http://bl.ocks.org/1166403 */
 
-    // define dimensions of graph
-    var m = [80, 80, 80, 80]; // margins
-    var w = 1000 - m[1] - m[3]; // width
-    var h = 400 - m[0] - m[2]; // height
+    getDementions();
 
-    var zone1Min = this.props.zone_one_min;
-    var zone1Max = this.props.zone_one_max;
 
-    // Simple data array, from first heart rate till last heart rate during the time period. This data was extracted using the php file
-    // var data = this.state.hrm_data_points;
+  var data = [this.props.zone_four_max
+            , this.props.zone_four_min
+            , this.props.zone_three_max
+            , this.props.zone_three_min
+            , this.props.zone_two_max
+            , this.props.zone_two_min
+            , this.props.zone_one_max
+            , this.props.zone_one_min];
+
+
+    // Add an SVG element with the desired dimensions and margin.
+    var barGraph = d3.select("#barGraph").append("svg:svg")
+                     .attr("width", w + m[1] + m[3])
+                     .attr("height", h + m[0] + m[2])
+                     .append("svg:g")
+                     .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+
+    var xAxis = d3.scale.linear()
+                  .domain([0, d3.max(data)])
+                  .range([0, w]);
+
+    var yAxis = d3.scale.ordinal()
+                  .domain(data)
+                  .rangeBands([0, h]);
+
+    barGraph.selectAll("rect")
+            .data(data)
+            .enter().append("rect")
+            .attr("y", yAxis)
+            .attr("width", xAxis)
+            .attr("height", yAxis.rangeBand())
+            .attr("fill", function(d) { return "rgba(0, 100, " + (d ) + ", 0.5)"});
+
+    barGraph.selectAll("text")
+            .data(data)
+            .enter().append("text")
+            .attr("x", xAxis)
+            .attr("y", function(d) { return yAxis(d) + yAxis.rangeBand() / 2; })
+            .attr("dx", -3) // padding-right
+            .attr("dy", ".35em") // vertical-align: middle
+            .attr("text-anchor", "end") // text-align: right
+            .text(String);
+
+
+    // create left yAxis
+    var yAxisLeft = d3.svg.axis().scale(yAxis).ticks(4).orient("left");
+
+    barGraph.append("svg:g")
+         .attr("class", "y axis")
+         .attr("transform", "translate(-25,0)")
+         .call(yAxisLeft);
+
+  },
+  componentDidMount: function() {
+    this.drawDataVisualization();
+  },
+  render: function() {
+    return <div id="barGraph" className="aGraph"></div>;
+  }
+});
+
+
+
+
+var HrmSessionButton = React.createClass({
+  drawDataVisualization: function() {
+    getDementions();
+
     var bpmData = [];
     var durationData = [];
+
     this.state.hrm_data_points.map(function(data_point){
       bpmData.push(data_point.bpm);
       durationData.push(data_point.duration);
     });
-
-    // debugger;
-    var padding = 50;
 
     // X scale will fit all values from data[] within pixels 0-w
     var x = d3.scale.linear().domain([0, bpmData.length]).range([0, w]);
@@ -45,40 +111,6 @@ var HrmSessionButton = React.createClass({
                   .attr("height", h + m[0] + m[2])
                   .append("svg:g")
                   .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
-
-
-
-
-
-    // horizontal data /////////////////////////
-    var data = [4, 8, 15, 16, 23, 42];
-
-    var xAxis = d3.scale.linear()
-         .domain([0, d3.max(data)])
-         .range([0, w]);
-
-    var yAxis = d3.scale.ordinal()
-         .domain(data)
-         .rangeBands([0, h]);
-
-    lineGraph.selectAll("rect")
-         .data(data)
-       .enter().append("rect")
-         .attr("y", yAxis)
-         .attr("width", xAxis)
-         .attr("height", yAxis.rangeBand());
-
-    lineGraph.selectAll("text")
-         .data(data)
-       .enter().append("text")
-         .attr("x", xAxis)
-         .attr("y", function(d) { return yAxis(d) + yAxis.rangeBand() / 2; })
-         .attr("dx", -3) // padding-right
-         .attr("dy", ".35em") // vertical-align: middle
-         .attr("text-anchor", "end") // text-align: right
-         .text(String);
-
-     /////////////////////////////////////////
 
     // create left yAxis
     var yAxisLeft = d3.svg.axis().scale(y).ticks(4).orient("left");
@@ -143,7 +175,6 @@ var HrmSessionButton = React.createClass({
       <div>
       <div id="loader" className={this.state.loading? "is-loading" : ""}><h1>Loading...</h1></div>
       <div id="lineGraph" className="aGraph"></div>
-      <div id="barGraph" className="aGraph"></div>
         <button onClick={this.handleClick}>DataPonts</button>
       </div>
     );

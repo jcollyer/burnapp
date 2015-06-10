@@ -1,9 +1,18 @@
-<p id="notice"><%= notice %></p>
 
-<% link_to 'Edit', edit_user_path(@user) %>
-<% link_to 'Back', users_path %>
+<%= react_component('HrZoneChart',
+                       zone_one_min: @user.hr_zone1_bpm_min,
+                       zone_one_max: @user.hr_zone1_bpm_max,
+                       zone_two_min: @user.hr_zone2_bpm_min,
+                       zone_two_max: @user.hr_zone2_bpm_max,
+                       zone_three_min: @user.hr_zone3_bpm_min,
+                       zone_three_max: @user.hr_zone3_bpm_max,
+                       zone_four_min: @user.hr_zone4_bpm_min,
+                       zone_four_max: @user.hr_zone4_bpm_max) %>
 
-<h1><%= @user.username %></h1>
+<br />
+<br />
+
+
 ------
 <p>zone1 min: <%= @user.hr_zone1_bpm_min %></p>
 <p>zone1 max: <%= @user.hr_zone1_bpm_max %></p>
@@ -18,16 +27,14 @@
 <p>zone4 max: <%= @user.hr_zone4_bpm_max %></p>
 ------
 
-<br />
-<br />
 
 
 <% @user.hrm_sessions.each do |hrm_session| %>
-  id: <%= hrm_session.id %>
-  duration: <%= HHMMSS(hrm_session.duration) %>
-  <%= react_component('HrmSessionButton',
-                       session_id: hrm_session.id,
-                       session_duration: HHMMSS(hrm_session.duration)) %>
-  <br />
+  <div class="hrm_session_button">
+    <%= HHMMSS(hrm_session.duration) %>
+    <%= react_component('HrmSessionButton',
+                         session_id: hrm_session.id,
+                         session_duration: HHMMSS(hrm_session.duration)) %>
+  </div>
 <% end %>
 

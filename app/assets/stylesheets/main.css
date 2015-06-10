@@ -54,3 +54,19 @@ body{
   display:block;
 }
 
+#barGraph {
+  position: absolute;
+  top: 140px;
+  left: 200px;
+}
+
+#lineGraph {
+  position: absolute;
+  top: 140px;
+}
+
+.hrm_session_button {
+  float: left;
+  margin: 10px;
+}
+
