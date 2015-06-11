@@ -1,4 +1,6 @@
-<p>Welcome <%= @user.username %><p>
+<div class="container">
+  Welcome <%= @user.username %>
+</div>
 
 
 <div class="user-zones">
@@ -31,7 +33,7 @@
 
 
 
-<div class="row data-points">
+<div class="container data-points">
   <% @user.hrm_sessions.each do |hrm_session| %>
     <div class="col-md-3">
       <%= HHMMSS(hrm_session.duration) %>

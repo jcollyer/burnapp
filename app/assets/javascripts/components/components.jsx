@@ -6,32 +6,12 @@ var setDementions = function(){
   p = 50; //padding
 }
 
-var userZones = [];
-var lineAnimationTime = 10000;
-
-var setUserZones = function() {
-  var zones = document.getElementsByClassName("zone");
-  for(var i = 0;i < zones.length; i++) {
-    userZones.push(zones[i].innerHTML);
-  };
-  return userZones;
-};
-
-var CountDown = React.createClass({
-  render: function(){
-    return <div className="timer"></div>;
-  }
-});
-
-// 250 * x = 10000
-
 var HrmSessionButton = React.createClass({
 
   startCountDown: function(duration) {
     that = this;
-    console.log(duration)
-    // debugger;
     var timer = duration, minutes, seconds;
+
     // var milliseconds = duration/10;
     var milliseconds = 8.5;
     var timeInterval = setInterval(function () {
@@ -48,7 +28,7 @@ var HrmSessionButton = React.createClass({
             timer = 0;
             clearInterval(timeInterval);
         }
-    },milliseconds);
+    }, milliseconds);
   },
   drawDataVisualization: function() {
     that = this;
@@ -56,10 +36,9 @@ var HrmSessionButton = React.createClass({
     var durationData = [];
     var sessionDuration = that.props.session_duration;
 
-
-
     setDementions();
-    setUserZones();
+
+    //clear existing line graph
     $("#lineGraph").html("");
 
     d3.json("http://localhost:3000/users/"+user_id+"/hrm_sessions/"+session_id+".json", function(data){
@@ -93,7 +72,7 @@ var HrmSessionButton = React.createClass({
         return y(d);
       })
 
-      // Add an SVG element with the desired dimensions and margin.
+      // add an SVG element with the desired dimensions and margin.
       var lineGraph = d3.select("#lineGraph").append("svg:svg")
                     .attr("width", w + m[1] + m[3])
                     .attr("height", h + m[0] + m[2])
@@ -103,7 +82,7 @@ var HrmSessionButton = React.createClass({
       // create left yAxis
       var yAxisLeft = d3.svg.axis().scale(y).ticks(6).orient("left");
 
-      // Add the y-axis to the left
+      // add the y-axis to the left
       lineGraph.append("svg:g")
            .attr("class", "y axis")
            .attr("transform", "translate(-25,0)")
@@ -112,7 +91,7 @@ var HrmSessionButton = React.createClass({
       // crate bottom xAxis
       var xAxisBottom = d3.svg.axis().scale(x).ticks(16).orient("bottom");
 
-      // Add the x-axis to the bottom
+      // add the x-axis to the bottom
       lineGraph.append("svg:g")
            .attr("class", "x axis")
            .attr("transform", "translate(0," + (h) + ")")
@@ -121,14 +100,15 @@ var HrmSessionButton = React.createClass({
            .attr("x", w / 2)
            .attr("y", 50)
            .style("text-anchor", "middle")
-           .text(sessionDuration + " minutes" + " | " + data_points.length + " total sessions" );
+           .text(data_points.length + " total sessions" );
 
-      // Add the line by appending an svg:path element with the data line we created above
+      // add the line by appending an svg:path element with the data line we created above
       // do this AFTER the axes above so that the line is above the tick-lines
       var linePath = lineGraph.append("svg:path").attr("d", line(bpmData));
 
       var totalLength = linePath.node().getTotalLength();
 
+      // line animation
       linePath.attr("stroke-dasharray", totalLength + " " + totalLength)
               .attr("stroke-dashoffset", totalLength)
               .transition()
@@ -136,7 +116,6 @@ var HrmSessionButton = React.createClass({
                 .ease("linear")
                 .attr("stroke-dashoffset", 0);
 
-                // 22 36:41
     });
   },
   getInitialState: function() {
@@ -147,27 +126,8 @@ var HrmSessionButton = React.createClass({
   },
   handleClick: function() {
     session_id = this.props.session_id;
-    // this.getAllHrmSessions();
     this.drawDataVisualization();
     this.setState({loading: true});
-  },
-  getAllHrmSessions: function() {
-    that = this;
-
-    $.ajax({
-      url: "http://localhost:3000/users/"+user_id+"/hrm_sessions/"+session_id+".json",
-      dataType: 'json',
-      success: function(hrm_sessions) {
-        this.setState({hrm_data_points: hrm_sessions.hrm_session.hrm_data_points});
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(xhr, status, err.toString());
-      }.bind(this)
-    }).done(function() {
-      that.drawDataVisualization();
-      that.setState({loading:false});
-    });
-
   },
   render: function() {
     return (
