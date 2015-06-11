@@ -1,34 +1,34 @@
 body{
     background: #f4f4f4;
 }
-  /* tell the SVG path to be a thin blue line without any area fill */
-  path {
-    stroke: steelblue;
-    stroke-width: 3;
-    fill: none;
-  }
 
-  .axis {
-    shape-rendering: crispEdges;
-  }
+path {
+  stroke: steelblue;
+  stroke-width: 3;
+  fill: none;
+}
 
-  .x.axis line {
-    stroke: lightgrey;
-  }
+.axis {
+  shape-rendering: crispEdges;
+}
 
-  .x.axis .minor {
-    stroke-opacity: .5;
-  }
+.x.axis line {
+  stroke: lightgrey;
+}
 
-  .y.axis line, .y.axis path {
-    fill: none;
-    stroke: #000;
-  }
+.x.axis .minor {
+  stroke-opacity: .5;
+}
 
-  .x.axis line, .x.axis path {
-    fill: none;
-    stroke: #000;
-  }
+.y.axis line, .y.axis path {
+  fill: none;
+  stroke: #000;
+}
+
+.x.axis line, .x.axis path {
+  fill: none;
+  stroke: #000;
+}
 
 #loader {
   position: fixed;
@@ -61,12 +61,12 @@ body{
 
 #lineGraph {
   position: absolute;
-  top: -321px;
+  top: -380px;
   left: 15px;
 }
 
 .user-zones {
-  height: 237px;
+  height: 240px;
   width: 0%;
 }
 
@@ -101,6 +101,10 @@ body{
 .user-zone.zone-4 {
   height: 11%;
   background: #999;
+}
+
+.data-points {
+  margin-top: 60px;
 }
 
 
