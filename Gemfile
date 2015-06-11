@@ -30,6 +30,7 @@ gem 'active_model_serializers'
 gem 'pry'
 gem 'react-rails', '~> 1.0'
 gem "d3-rails"
+gem 'will_paginate', '~> 3.0.6'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
