@@ -4,7 +4,7 @@ body{
   /* tell the SVG path to be a thin blue line without any area fill */
   path {
     stroke: steelblue;
-    stroke-width: 1;
+    stroke-width: 3;
     fill: none;
   }
 
@@ -52,21 +52,55 @@ body{
 
 #loader.is-loading {
   display:block;
+  z-index: 9;
 }
 
 #barGraph {
-  position: absolute;
-  top: 140px;
-  left: 200px;
+  position: relative;
 }
 
 #lineGraph {
   position: absolute;
-  top: 140px;
+  top: -321px;
+  left: 15px;
 }
 
-.hrm_session_button {
-  float: left;
-  margin: 10px;
+.user-zones {
+  height: 237px;
+  width: 0%;
 }
+
+.user-zones.ready {
+  width: 100%;
+  transition: width 0.5s ease-in-out;
+}
+.user-zone {
+  margin: 0px;
+  text-align: center;
+  line-height: 1em;
+  font-size: 23px;
+  padding: 2px;
+  color: white;
+}
+.user-zone.under-zone {
+  height: 51%;
+  background: #ddd;
+}
+.user-zone.zone-1 {
+  height: 14%;
+  background: #ccc;
+}
+.user-zone.zone-2 {
+  height: 12%;
+  background: #bbb;
+}
+.user-zone.zone-3 {
+  height: 12%;
+  background: #aaa;
+}
+.user-zone.zone-4 {
+  height: 11%;
+  background: #999;
+}
+
 
